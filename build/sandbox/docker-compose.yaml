@@ -1,4 +1,22 @@
 version: '3'
 services:
   client:
+    build: 
+      dockerfile: build/sandbox/client/FileRepositoryService.dockerfile
+      context: $CONTEXT_LOCATION
+    container_name: File Repository Service
+
+  server:
+    build: 
+      dockerfile: build/sandbox/server/ApiService.dockerfile
+      context: $CONTEXT_LOCATION
+    container_name: API Service
     
+  db:
+    build: 
+      dockerfile: build/sandbox/database/DynamoDB.dockerfile
+      context: $CONTEXT_LOCATION
+    container_name: Database
+
+    
+

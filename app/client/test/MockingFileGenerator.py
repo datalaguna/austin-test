@@ -7,7 +7,7 @@ import random
 number_of_files = 5
 number_of_directories = 5
 
-directory = "app/dist/queue"
+directory = "/dist/queue"
 
 def createFile(file_path,content):
   # Write the content to the file
