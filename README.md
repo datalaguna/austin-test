@@ -3,7 +3,7 @@
 > Date: April 8th 2024
 
 # What is this project?
-This is my submission for Experian, the original problem statement can be found at the file *ProblemStatement.md*, have fun cheking my code!
+This is my submission for Experian, the original problem statement can be found at the file *ProblemStatement.md*, so enjoy!
 
 Overall the project structure follows the SDLC, where the developer begins writting the initial code at the *app folder* , later creating the building steps before deploying to a certain environment, therefore the *build folder*, in the end the *deploy folder* WILL contain the desired code that contains the boto3/terraform/cloudformation file that creates the required cloud resources.
 
@@ -19,7 +19,7 @@ That being said this current version ensures centralization and helps to establi
 
 In order to emulate the constant queue of files, the **app/test/MockingFileGenerator.py** file was generated
 
-In order to comply with the answer, the file named **app/src/SLA_Checker.ps1 was created**
+In order to comply with the answer, the file named **app/src/SLA_Checker.ps was created**
 
 
 

@@ -1,3 +1,10 @@
+param (
+    [string]$directory,
+    [string]$address
+)
+
+Write-Host "Initiating connection to $address and watching folder $directory"
+
 function Invoke-ApiPostRequest {
     param(
         [string]$Url,
@@ -8,7 +15,7 @@ function Invoke-ApiPostRequest {
         "Content-Type" = "application/json"
     }
 
-    $bodyJson = $Body | ConvertTo-Json
+    $bodyJson = $Body | ConvertTo-Json -Depth 4
 
     try {
         $response = Invoke-RestMethod -Uri $Url -Method Post -Headers $headers -Body $bodyJson
@@ -20,12 +27,9 @@ function Invoke-ApiPostRequest {
     }
 }
 
-# Define the directory to search
-$directory = "app/dist/queue"
-
 # Get a list of all directories in the specified directory
 $directories = Get-ChildItem -Path $directory -Directory
-
+$sla_error_array = @()
 # Loop through each directory
 foreach ($dir in $directories) {
     # Get the path to the SLA file in the current directory
@@ -44,20 +48,42 @@ foreach ($dir in $directories) {
 
         # Check if the SLA datetime is in the past
         if ($slaDatetime -lt $currentDatetime) {
-            $endpoint = "http://127.x.0.1/api/error_folder"
-            $bodyData = @{
+            $endpoint = "$address"
+
+            # Get a list of files in the directory that match your criteria
+            $files = Get-ChildItem -Path $dir.FullName -File | Where-Object { $_.Name -like "*.txt" }
+
+            # Create an array to store the file objects
+            $fileObjects = @()
+            foreach ($file in $files) {
+                $fileObjects += @{
+                    "filename" = $file.Name
+                    "creationDate" = $file.CreationTime.ToString("yyyy-MM-ddTHH:mm:ss")
+                }
+            }
+
+          
+            $sla_error_array+= @{
                 "folder" = $dir.Name
                 "sla" = $slaContent
-                "files" = #add here the files that matches 
+                "files" = $fileObjects
             }
-
-            $response = Invoke-ApiPostRequest -Url $endpoint -Body $bodyData
-
-            if ($response -ne $null) {
-                Write-Host "API invoked successfully. Response: $response"
-            } else {
-                Write-Host "API invocation failed."
-            }
+         
         }
     }
 }
+
+$sla_error = @{
+    "sla_error" = $sla_error_array
+}
+
+Write-Host "Sending"
+Write-Host ($sla_error | ConvertTo-Json -Depth 4)
+
+$response = Invoke-ApiPostRequest -Url $address -Body $sla_error
+if ($response -ne $null) {
+    Write-Host "API invoked successfully. Response: $response"
+} else {
+    Write-Host "API invocation failed."
+}
+

@@ -1,22 +1,33 @@
-version: '3'
 services:
   client:
     build: 
       dockerfile: build/sandbox/client/FileRepositoryService.dockerfile
       context: $CONTEXT_LOCATION
-    container_name: File Repository Service
+      args:
+        - API_SERVICE_ADDRESS=$INTERNAL_API_SERVICE_ADDRESS
+        - DIRECTORY_PATH=$DIRECTORY_PATH        
+    container_name: FileRepositoryService
+    depends_on:
+      - server
+    links:
+      - "server:api"
 
   server:
     build: 
       dockerfile: build/sandbox/server/ApiService.dockerfile
       context: $CONTEXT_LOCATION
-    container_name: API Service
+    container_name: APIService
+    ports:
+      - "$EXTERNAL_API_SERVICE_PORT:$INTERNAL_API_SERVICE_PORT"
+    depends_on:
+      - db
     
   db:
     build: 
       dockerfile: build/sandbox/database/DynamoDB.dockerfile
       context: $CONTEXT_LOCATION
     container_name: Database
+
 
     
 
