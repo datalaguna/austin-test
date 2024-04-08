@@ -27,6 +27,8 @@ services:
       dockerfile: build/sandbox/database/DynamoDB.dockerfile
       context: $CONTEXT_LOCATION
     container_name: Database
+    ports:
+      - "9001:8000"
 
 
     

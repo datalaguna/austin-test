@@ -13,13 +13,6 @@ Also a current disadvantage of the the current initial layout is the monolithic 
 
 That being said this current version ensures centralization and helps to establish an initial blueprint of a CI/CD
 
-# Coding answers
-
-## Powershell
-
-In order to emulate the constant queue of files, the **app/test/MockingFileGenerator.py** file was generated
-
-In order to comply with the answer, the file named **app/src/SLA_Checker.ps was created**
 
 
 
