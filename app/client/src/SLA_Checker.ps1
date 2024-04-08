@@ -44,7 +44,7 @@ foreach ($dir in $directories) {
 
         # Check if the SLA datetime is in the past
         if ($slaDatetime -lt $currentDatetime) {
-            $endpoint = "http://127.0.0.1/api/error_folder"
+            $endpoint = "http://127.x.0.1/api/error_folder"
             $bodyData = @{
                 "folder" = $dir.Name
                 "sla" = $slaContent
